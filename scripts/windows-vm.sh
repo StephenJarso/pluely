@@ -94,6 +94,7 @@ exec "$PROOT_BIN" -b "$QEMU_DIR/usr/lib/x86_64-linux-gnu/qemu:/usr/lib/x86_64-li
     -device virtio-net-pci,netdev=net0 \
     -netdev user,id=net0,hostfwd=tcp::13389-:3389 \
     -usb -device usb-tablet \
+    -device usb-host,vendorid=0x04f2,productid=0xb681 \
     -vga virtio \
     -display gtk,gl=on \
     -name "Windows 10" \
@@ -103,6 +104,10 @@ exec "$PROOT_BIN" -b "$QEMU_DIR/usr/lib/x86_64-linux-gnu/qemu:/usr/lib/x86_64-li
     "$QEMU_BIN" \
     $KVM_ARGS \
     $BIOS_ARGS \
+    -audiodev pipewire,id=snd0 \
+    -machine pc,audiodev=snd0 \
+    -device ich9-intel-hda \
+    -device hda-duplex,audiodev=snd0 \
     -m "$RAM" \
     -smp "$CPUS" \
     -drive file="$DISK_IMAGE",format=qcow2,if=ide \
@@ -111,6 +116,7 @@ exec "$PROOT_BIN" -b "$QEMU_DIR/usr/lib/x86_64-linux-gnu/qemu:/usr/lib/x86_64-li
     -device virtio-net-pci,netdev=net0 \
     -netdev user,id=net0,hostfwd=tcp::13389-:3389 \
     -usb -device usb-tablet \
+    -device usb-host,vendorid=0x04f2,productid=0xb681 \
     -vga std \
     -display gtk \
     -name "Windows 10"
