@@ -25,7 +25,22 @@ pub fn setup_main_window(app: &mut App) -> Result<(), Box<dyn std::error::Error>
     //     let _ = window.set_focusable(false);
     // }
 
+    // Exclude the window from screen capture (stealth mode) on Windows
+    #[cfg(target_os = "windows")]
+    set_window_excluded_from_capture(&window);
+
     Ok(())
+}
+
+/// Excludes a window from screen capture on Windows so it never appears in
+/// screen shares, recordings, or screenshots. Mirrors macOS `contentProtected`.
+#[cfg(target_os = "windows")]
+fn set_window_excluded_from_capture<R: Runtime>(window: &WebviewWindow<R>) {
+    use windows::Win32::UI::WindowsAndMessaging::{SetWindowDisplayAffinity, WDA_EXCLUDEFROMCAPTURE};
+
+    if let Ok(hwnd) = window.hwnd() {
+        let _ = unsafe { SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE) };
+    }
 }
 
 /// Positions a window at the top center of the screen with a specified Y offset
@@ -177,6 +192,10 @@ pub fn create_dashboard_window<R: Runtime>(
         .visible(false);
 
     let window = base_builder.build()?;
+
+    // Exclude the dashboard window from screen capture on Windows (stealth mode)
+    #[cfg(target_os = "windows")]
+    set_window_excluded_from_capture(&window);
 
     // Set up close event handler - hide window instead of destroying it
     setup_dashboard_close_handler(&window);
