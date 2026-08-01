@@ -130,4 +130,17 @@ export const AI_PROVIDERS = [
     responseContentPath: "choices[0].message.content",
     streaming: true,
   },
+  {
+    id: "ollama-host",
+    curl: `curl -X POST http://10.0.2.2:11434/v1/chat/completions \\
+    -H "Authorization: Bearer {{API_KEY}}" \\
+    -H "Content-Type: application/json" \\
+    -d '{
+    "model": "{{MODEL}}",
+    "messages": [{"role": "system", "content": "{{SYSTEM_PROMPT}}"}, {"role": "user", "content": [{"type": "text", "text": "{{TEXT}}"}, {"type": "image_url", "image_url": {"url": "data:image/png;base64,{{IMAGE}}"}}]}]
+  }'`,
+    responseContentPath: "choices[0].message.content",
+    streaming: true,
+  },
 ];
+
