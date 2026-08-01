@@ -105,7 +105,6 @@ exec "$PROOT_BIN" -b "$QEMU_DIR/usr/lib/x86_64-linux-gnu/qemu:/usr/lib/x86_64-li
     $KVM_ARGS \
     $BIOS_ARGS \
     -audiodev pipewire,id=snd0 \
-    -machine pc,audiodev=snd0 \
     -device ich9-intel-hda \
     -device hda-duplex,audiodev=snd0 \
     -m "$RAM" \
